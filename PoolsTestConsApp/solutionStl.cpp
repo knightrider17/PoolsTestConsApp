@@ -12,7 +12,7 @@ bool predicate_fun(IPAddress _ip_1, IPAddress _ip_2)
 	return _ip_1 < _ip_2;
 }
 
-// заполним из   _pool_from   в    _pool_to
+// Р·Р°РїРѕР»РЅРёРј РёР·   _pool_from   РІ    _pool_to
 void fillVVectorFromPool(const Pool& _pool_from, vector<vector<IPAddress>>& _pool_to)
 {
 	for (auto& it_range : _pool_from)
@@ -26,10 +26,10 @@ void fillVVectorFromPool(const Pool& _pool_from, vector<vector<IPAddress>>& _poo
 	}
 }
 
-// заполним из   _pool_from   в    _pool_to
+// Р·Р°РїРѕР»РЅРёРј РёР·   _pool_from   РІ    _pool_to
 void fillPoolFromVVector(vector<vector<IPAddress>>& _pool_from, Pool& _pool_to)
 {
-	// отработает, даже если элемент в it_vrange всего один, просто добавится диапазон [ххх ; ххх]
+	// РѕС‚СЂР°Р±РѕС‚Р°РµС‚, РґР°Р¶Рµ РµСЃР»Рё СЌР»РµРјРµРЅС‚ РІ it_vrange РІСЃРµРіРѕ РѕРґРёРЅ, РїСЂРѕСЃС‚Рѕ РґРѕР±Р°РІРёС‚СЃВ¤ РґРёР°РїР°Р·РѕРЅ [С…С…С… ; С…С…С…]
 	for (auto& it_vrange : _pool_from)
 		_pool_to.push_back(Range(it_vrange[0], it_vrange[it_vrange.size() - 1]));
 }
@@ -38,7 +38,7 @@ void fillPoolFromVVector(vector<vector<IPAddress>>& _pool_from, Pool& _pool_to)
 // Pool = vector<pair<uint32_t, uint32_t>>
 //*
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// SOLUTION 1: // STL-Решение используя SET_DIFFERENCE
+// SOLUTION 1: // STL-вЂ“РµС€РµРЅРёРµ РёСЃРїРѕР»СЊР·СѓВ¤ SET_DIFFERENCE
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Pool find_diff(const Pool& _old_pool, const Pool& _new_pool)
@@ -66,7 +66,7 @@ Pool find_diff(const Pool& _old_pool, const Pool& _new_pool)
 			for (auto& new_item : new_pool)
 			{
 				diff.clear();
-				// set_difference флгоритм всё сделает за нас
+				// set_difference С„Р»РіРѕСЂРёС‚Рј РІСЃР„ СЃРґРµР»Р°РµС‚ Р·Р° РЅР°СЃ
 				vector<IPAddress>::iterator it;
 				set_difference(old_item.begin(), old_item.end(),
 					new_item.begin(), new_item.end(),
@@ -74,8 +74,8 @@ Pool find_diff(const Pool& _old_pool, const Pool& _new_pool)
 				
 				if (diff.size() < old_item.size())
 				{
-					// особенность работы set_difference для случая с old=123456 пересечением всередине new=34 
-					// результат помещается не в 2 выходных объекта  [12] [56], а в один и они идут друг за другом [1256]
+					// РѕСЃРѕР±РµРЅРЅРѕСЃС‚СЊ СЂР°Р±РѕС‚С‹ set_difference РґР»В¤ СЃР»СѓС‡Р°В¤ СЃ old=123456 РїРµСЂРµСЃРµС‡РµРЅРёРµРј РІСЃРµСЂРµРґРёРЅРµ new=34 
+					// СЂРµР·СѓР»СЊС‚Р°С‚ РїРѕРјРµС‰Р°РµС‚СЃВ¤ РЅРµ РІ 2 РІС‹С…РѕРґРЅС‹С… РѕР±СЉРµРєС‚Р°  [12] [56], Р° РІ РѕРґРёРЅ Рё РѕРЅРё РёРґСѓС‚ РґСЂСѓРі Р·Р° РґСЂСѓРіРѕРј [1256]
 					if (!diff.empty())
 					{
 						if (old_item[0] == diff[0] && old_item[old_item.size() - 1] == diff[diff.size() - 1])
@@ -83,9 +83,9 @@ Pool find_diff(const Pool& _old_pool, const Pool& _new_pool)
 							ptrdiff_t pos = find(old_item.begin(), old_item.end(), new_item[0]) - old_item.begin();
 							if (pos > 0)
 							{
-								// удалим из dif "правую" часть:
+								// СѓРґР°Р»РёРј РёР· dif "РїСЂР°РІСѓСЋ" С‡Р°СЃС‚СЊ:
 								diff.erase(diff.begin() + pos, diff.end());
-								// удалим из old "левую" часть:
+								// СѓРґР°Р»РёРј РёР· old "Р»РµРІСѓСЋ" С‡Р°СЃС‚СЊ:
 								old_item.erase(old_item.begin(), old_item.begin() + pos + new_item.size());
 
 								old_pool.erase(old_pool.begin() + old_pool_i);
